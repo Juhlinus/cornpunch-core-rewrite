@@ -239,5 +239,12 @@ class Facepunch {
         }
         return false;
     }
+    //Lazy way to check if a user is valid.
+    public function validUserID( $userid ){
+        $this->setUserID( $userid );
+        //Is the user valid?
+        return $this->isUserValid();
+    }
+
 }
 
