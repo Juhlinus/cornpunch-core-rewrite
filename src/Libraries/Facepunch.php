@@ -13,7 +13,7 @@
  * don't use this to hack facepunch. I don't want to get sued or anything. All of this was written for
  * educational purposes. I did not write this for bad, I promise! :c
  */
-namespace Cornpunch;
+namespace Cornpunch\Libraries;
 
 class Facepunch {
     public $pagehtml;
