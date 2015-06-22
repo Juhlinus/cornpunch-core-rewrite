@@ -185,8 +185,37 @@ class Database {
      * @return array
      */
     public function activeUsers() {
+
         $userids = Capsule::table('activeusers')->select('userid');
 
         return $userids;
+    }
+
+    public function insertActiveUsers(array $data) {
+
+        $result = Capsule::table('activeusers')->insert([
+            'userid'        => $data['userid'],
+            'sessionid'     => $data['sessionkey'],
+            'userlevel'     => $data['userlevel'],
+            'ip'            => $data['ip'],
+            'logintime'     => $data['time']
+        ]);
+
+        return ($result) ? true : false;
+    }
+
+    public function getActiveUsersBySessionId( $sessionid ) {
+
+        $result = Capsule::table('activeusers')
+                ->where('sessionid', $sessionid)
+                ->take(1)
+                ->get();
+
+        return ($result) ? $result['userid'] : false;
+    }
+
+    public function destroyBrokenSessions( $userid ) {
+
+        Capsule::table('activeusers')->where('userid', $userid)->delete();
     }
 }
