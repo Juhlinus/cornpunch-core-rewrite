@@ -1,0 +1,8 @@
+{
+    "name": "HaskellUK/Cornpunch",
+    "description": "Cornpunch is a Facepunch powered movie hosting service, it was made for educational purposes. It is powered by my Facepunch wrapper.",
+    "require": {
+        "php": ">=5.0",
+        "juhlinus/cornpunch-core": "dev-master"
+    }
+}
