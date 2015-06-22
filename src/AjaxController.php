@@ -52,8 +52,14 @@ class AjaxController{
             //Its not dead! Then lets just return this key since its alreayd valid!
             return $key;
         }
-        //Assuming the user does not have a key, we will now give him a new one.
-        return $this->database->addAuthenticationKey( $array["userid"]);
+        //Assuming the user does not have a key, we will now give him a new one, and prepare an array to be sent back
+        $information = array(
+            "authkey" => $this->database->addAuthenticationKey( $array["userid"] ),
+            "username" => $this->facepunch->getUsername(),
+            "userid" => $this->facepunch->userid,
+        );
+        //Return this
+        return $information;
     }
 
     public function finishAuthentication( $array ){
