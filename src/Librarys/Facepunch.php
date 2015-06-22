@@ -13,8 +13,9 @@
  * don't use this to hack facepunch. I don't want to get sued or anything. All of this was written for
  * educational purposes. I did not write this for bad, I promise! :c
  */
+namespace Cornpunch;
 
-class facepunch {
+class Facepunch {
     public $pagehtml;
     public $userid;
     public function __construct() {
