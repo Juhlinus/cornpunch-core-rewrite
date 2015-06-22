@@ -1,0 +1,88 @@
+body{
+    overflow: hidden;
+}
+
+section.nav-bar{
+    width: 100%;
+    min-width: 900px;
+    height: 75px;
+    float: left;
+}
+
+div.nav-logo{
+    width: 15%;
+    min-width: 250px;
+    height: 100%;
+    float: left;
+    background: url(../images/logo-large.png) center no-repeat;
+}
+
+div.nav-options{
+    width: 25%;
+    min-width: 400px;
+    height: 100%;
+    float: left;
+    padding-top: 28px;
+}
+
+div.nav-options ul{
+    list-style: none;
+    position: relative;
+    float: left;
+    margin: 0;
+}
+
+div.nav-options ul a{
+    text-decoration: none;
+    font-family: 'Arial', sans-serif;
+    font-size: 15px;
+    font-weight: bold;
+    color: white;
+    padding:0 15px;
+    text-transform: lowercase;
+}
+
+div.nav-options ul li
+{
+    position:relative;
+    float:left;
+    margin-left:0;
+    padding:0;
+}
+
+div.nav-options ul ul
+{
+    display:none;
+    position:absolute;
+    top:100%;
+    left:0;
+    padding:0;
+}
+
+div.nav-options ul ul li
+{
+    float:none;
+    width:125px;
+}
+
+div.nav-options ul ul a
+{
+    line-height:120%;
+}
+
+div.nav-options ul ul ul
+{
+    top:0;
+    left:100%;
+}
+
+div.nav-options ul li:hover > ul
+{
+    display:block;
+}
+
+/** Hide everything until we have loaded **/
+
+#loader{
+    display: none;
+}
