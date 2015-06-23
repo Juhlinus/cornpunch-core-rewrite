@@ -31,21 +31,29 @@ class AjaxController{
                 return ( $this->beginAuthentication( $array ) ) ? $this->beginAuthentication( $array ) : "invalid request";
                 break;
             case "confirm":
-                return ( $this->finishAuthentication( $array ) ) ? true : false;
+                return ( $this->finishAuthentication( $array ) ) ? true : "failed to finish request";
+                break;
+            default:
+                return false;
                 break;
         }
     }
 
     public function beginAuthentication($array){
-        if( !$array["userid"] )
+        if( !$array["userurl"] )
             return false;
+        //Parse this userid
+        if( !$this->facepunch->parseURL( $array["userurl"] ))
+            return false;
+        //Lets throw this out
+        $userid = $this->facepunch->parseURL( $array["userurl"] );
         //Are we even a valid user?
-        if( !$this->facepunch->validUserID( $array["userid"] ))
+        if( !$this->facepunch->validUserID( $userid ))
             return false;
         //Lets check to see if this user already has a key
-        if( $this->database->userAlreadyHasKey( $array["userid"])) {
+        if( $this->database->userAlreadyHasKey( $userid )) {
             //Save the key
-            $key = $this->database->userAlreadyHasKey( $array["userid"]);
+            $key = $this->database->userAlreadyHasKey( $userid );
             //If this dead?
             if( $this->database->keyExpired($key ))
                 return false;
@@ -54,7 +62,7 @@ class AjaxController{
         }
         //Assuming the user does not have a key, we will now give him a new one, and prepare an array to be sent back
         $information = array(
-            "authkey" => $this->database->addAuthenticationKey( $array["userid"] ),
+            "authkey" => $this->database->addAuthenticationKey( $userid ),
             "username" => $this->facepunch->getUsername(),
             "userid" => $this->facepunch->userid,
         );

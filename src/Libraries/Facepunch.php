@@ -15,8 +15,10 @@
 namespace Cornpunch\Libraries;
 
 class Facepunch {
+
     public $pagehtml;
     public $userid;
+
     public function __construct() {
         $curlInit = curl_init("http://www.facepunch.com");
         curl_setopt($curlInit, CURLOPT_CONNECTTIMEOUT, 10);
@@ -32,12 +34,14 @@ class Facepunch {
             die("Facepunch is down at the moment so we cannot wrap our APIs... sorry!");
         }
     }
+
     public function messagesDisabled() {
         if ($this->getIDNodeFromUserPage("visitor_messaging-tab")) {
             return false;
         }
         return true;
     }
+
     public function getIDNodeFromUserPage($idnode) {
         $html_page = new DomDocument;
         $html_page->loadHTML($this->getCachedUserPage());
@@ -47,15 +51,18 @@ class Facepunch {
             return false;
         }
     }
+
     public function getCachedUserPage() {
         return $this->pagehtml;
     }
+
     public function getAvatar( $html_output = false) {
         if( $html_output ) {
             return "<img src='http://facepunch.com/image.php?u=$this->userid'>";
         }
         return file_get_contents("http://facepunch.com/image.php?u=$this->userid");
     }
+
     public function getPostRatings($postid, $json = false) {
         $html_page        = new DOMDocument;
         $post_information = json_decode(file_get_contents("http://www.facepunch.com/ajax.php?do=rate_list&postid=$postid"));
@@ -77,22 +84,27 @@ class Facepunch {
         }
         return $ratings;
     }
+
     public function refreshCache() {
         $this->cacheUserPage($this->userid);
     }
+
     public function cacheUserPage($userid) {
         $this->pagehtml = file_get_contents("http://www.facepunch.com/member.php?u=$userid");
         if (!$this->userid == $userid) {
             $this->userid = $userid;
         }
     }
+
     public function currentUserID() {
         return $this->userid;
     }
+
     public function setUserID($userid) {
         $this->userid = $userid;
         $this->cacheUserPage($userid);
     }
+
     public function getUserInformation($json = false) {
         if (!$this->isUserValid()) {
             return false;
@@ -110,6 +122,7 @@ class Facepunch {
         }
         return $user_information;
     }
+
     public function isUserValid() {
         $html_page = new DomDocument;
         $html_page->loadHTML($this->getCachedUserPage());
@@ -120,6 +133,7 @@ class Facepunch {
         }
         return true;
     }
+
     public function getUsername() {
         if ($this->isGold()) {
             $username = $this->getIDNodeFromUserPage('userinfo')->getElementsByTagName('font')->item(0);
@@ -128,6 +142,7 @@ class Facepunch {
         $username = $this->getIDNodeFromUserPage('userinfo')->getElementsByTagName('span')->item(0);
         return $username->textContent;
     }
+
     public function isGold() {
         if ($this->getIDNodeFromUserPage('userinfo')) {
             $username = $this->getIDNodeFromUserPage('userinfo')->getElementsByTagName('font')->item(0);
@@ -142,6 +157,7 @@ class Facepunch {
         }
         return false;
     }
+
     public function getMembership() {
         if ($this->isDeveloper()) {
             return "developer";
@@ -156,6 +172,7 @@ class Facepunch {
             return "normal";
         }
     }
+
     public function isDeveloper() {
         if ($this->getIDNodeFromUserPage('userinfo')) {
             $username = $this->getIDNodeFromUserPage('userinfo')->getElementsByTagName('span')->item(1);
@@ -172,6 +189,7 @@ class Facepunch {
         }
         return false;
     }
+
     public function isMod() {
         if ($this->getIDNodeFromUserPage('userinfo')) {
             $username = $this->getIDNodeFromUserPage('userinfo')->getElementsByTagName('span')->item(1);
@@ -188,21 +206,25 @@ class Facepunch {
         }
         return false;
     }
+
     public function getJoinDate() {
         $joindate = $this->getIDNodeFromUserPage('view-stats_mini')->getElementsByTagName('dd')->item(0);
         return trim($joindate->textContent);
     }
+
     public function getPostCount() {
         $postcount   = $this->getIDNodeFromUserPage('view-stats_mini')->getElementsByTagName('dd')->item($this->getIDNodeFromUserPage('view-stats_mini')->getElementsByTagName('dd')->length - 1);
         $new_string  = trim(str_replace(",", "", $postcount->textContent));
         return (int) $new_string;
     }
+
     public function isOnline() {
         if ($this->getClassNodeFromUserPage('online')) {
             return true;
         }
         return false;
     }
+
     public function getClassNodeFromUserPage($classnode) {
         $html_page = new DomDocument;
         $html_page->loadHTML($this->getCachedUserPage());
@@ -214,6 +236,7 @@ class Facepunch {
             return false;
         }
     }
+
     public function isBanned() {
         if ($this->getIDNodeFromUserPage('userinfo')) {
             $username = $this->getIDNodeFromUserPage('userinfo')->getElementsByTagName('font')->item(0);
@@ -228,6 +251,7 @@ class Facepunch {
         }
         return false;
     }
+
     public function compareComments($key) {
         $posts = $this->getIDNodeFromUserPage('message_list')->getElementsByTagName('li');
         foreach ($posts as $message) {
@@ -239,11 +263,22 @@ class Facepunch {
         }
         return false;
     }
+
     //Lazy way to check if a user is valid.
     public function validUserID( $userid ){
         $this->setUserID( $userid );
         //Is the user valid?
         return $this->isUserValid();
+    }
+
+    public function parseURL( $url ){
+        //Safecheck this link
+        if( !preg_match("www.facepunch.com", $url) )
+            return false;
+        //Explode it
+        $string = explode("=", explode("?", $url)[1])[1];
+        //Return the users ID
+        return ( !empty( $string )) ? $string : false;
     }
 
 }
