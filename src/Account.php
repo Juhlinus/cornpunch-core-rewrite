@@ -9,21 +9,12 @@ class Account {
     protected $database;
     protected $account;
 
-<<<<<<< HEAD
-    public function __construct() {
-    
-=======
     public function __construct()
     {
->>>>>>> upstream/master
         $this->facepunch = new FacepunchWrapper;
         $this->database = new DatabaseController;
     }
-<<<<<<< HEAD
-    
-=======
 
->>>>>>> upstream/master
     public function bootstrapAccount( $userid ){
         //We first check to see if this account is a valid facepunch account
         if(!$this->facepunch->isUserValid())
@@ -31,11 +22,7 @@ class Account {
         //Set the ID
         $this->account = $userid;
     }
-<<<<<<< HEAD
-    
-=======
 
->>>>>>> upstream/master
     public function cacheFacepunchData()
     {
         //Set the userid

@@ -22,7 +22,7 @@ class Session {
         if ( !$this->facepunch->isUserValid() )
             return false;
 
-        $this->deleteBrokenSessions( $userid );
+        $this->destroyBrokenSessions( $userid );
 
         $this->startFreshSession();
 
