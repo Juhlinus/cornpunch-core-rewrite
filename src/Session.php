@@ -11,12 +11,11 @@ class Session {
 
     public function __construct() {
 
-        $this->database = new Database;
+        $this->database     = new Database;
+        $this->facepunch    = new FacepunchWrapper;
     }
 
     public function createSession( $userid ) {
-
-        $this->facepunch = new FacepunchWrapper;
 
         $this->facepunch->setUserID( $userid );
 
@@ -96,4 +95,5 @@ class Session {
         else
             return false;
     }
+
 }

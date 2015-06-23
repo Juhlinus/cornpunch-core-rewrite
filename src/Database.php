@@ -12,6 +12,7 @@ class Database {
      * and calls config function
      */
     public function __construct() {
+
         $this->capsule = new Capsule;
         echo ($this->config()) ? "Config done" : "Config error";
     }
@@ -22,6 +23,7 @@ class Database {
      * @return bool
      */
     public function config() {
+
         if ($this->capsule->addConnection([
                 'driver'    => 'mysql',
                 'host'      => 'localhost',
@@ -98,6 +100,7 @@ class Database {
      * @return void
      */
     public function deleteKey( $key ) {
+        
         Capsule::table('activations')->where('activationkey', $key)->delete();
     }
 
