@@ -204,6 +204,14 @@ class Database {
         return ($result) ? true : false;
     }
 
+    public function insertMovie( array $data){
+
+        $result = Capsulse::table('moviedata')->insert([
+            'uploderid'     => $data['userid'],
+            'moviedata'    => $data['moviedata']
+        ]);
+    }
+
     public function getActiveUsersBySessionId( $sessionid ) {
 
         $result = Capsule::table('activeusers')
@@ -217,5 +225,31 @@ class Database {
     public function destroyBrokenSessions( $userid ) {
 
         Capsule::table('activeusers')->where('userid', $userid)->delete();
+    }
+
+    public function updateUserData($userdata, $userid ){
+
+        Capsule::table('userdata')->where('userid', $userid)->update([
+           'userdata' => serialize( $userdata ),
+        ]);
+    }
+
+    public function getUserData($userid){
+
+        $result = Capsule::table('userdata')
+            ->where('userid', $userid)
+            ->take(1)
+            ->get();
+
+        return ( !empty($result)) ? $result['userdata'] : false;
+    }
+
+    public function getUploadedMovies( $userid ){
+
+        $result = Capsule::table('moviedata')
+            ->where('userid', $userid)
+            ->get();
+
+        return ( !empty($result)) ? $result : false;
     }
 }
